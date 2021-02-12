@@ -73,7 +73,7 @@ class Roles(commands.Cog):
             #Lists all categories
             if "cats" in ctx.message.content:
 
-                cat_names = get_categories(ctx).keys().replace("_", " ")
+                cat_names = [key.replace("_", " ") for key in get_categories(ctx).keys()]
 
                 embed = list2embed(cat_names, title = "Categories ", color = 'yellow')
 

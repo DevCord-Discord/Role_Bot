@@ -16,7 +16,7 @@ async def on_ready():
     print(f'Logged in as {bot.user.name}')
     bot.add_cog(roles.Roles(bot))
 
-bot.run('ODA5NjYzNjQ4MTYzMTY4Mjg3.YCYYCA.LYcekz2RHSMV5ICmDV2C1k3mh_s')
+bot.run('ODA5NjYzNjQ4MTYzMTY4Mjg3.YCYYCA.XeB6xEnSMOHVyCorcVWk6ej1HKA')
 
 '''@bot.command()
 async def l_roles(ctx):
