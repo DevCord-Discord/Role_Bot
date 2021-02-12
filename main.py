@@ -21,7 +21,7 @@ def main():
     #     bot.config = json.load(fh)
 
     # bot.run(bot.config['token'])
-    bot.run(os.environ['token'])
+    #bot.run(os.environ['token'])
     
 
 
