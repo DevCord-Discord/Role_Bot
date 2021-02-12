@@ -7,7 +7,9 @@ from discord.ext import commands
 
 import roles 
 
-bot = commands.Bot(command_prefix='>')
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix = '>', intents = intents)
 
 @bot.event
 async def on_ready():
@@ -22,6 +24,8 @@ def main():
 
     # bot.run(bot.config['token'])
     #bot.run(os.environ['token'])
+    
+    bot.run('ODA5NjYzNjQ4MTYzMTY4Mjg3.YCYYCA.gXacfT0hhmu2ISrLna-7m_J8oes')
     
 
 

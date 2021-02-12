@@ -142,8 +142,8 @@ class Roles(commands.Cog):
             await msg.delete()
             await role_msg.delete()
 
-        print(ctx.guild.members)
-        user = self.bot.get_user([mem for mem in ctx.guild.members if mem.id == user.id][0])
+        print(user.id)
+        user = [mem for mem in ctx.guild.members if mem.id == user.id][0]
         print(user)
         usr_roles = user.roles
         usr_roles.reverse()
