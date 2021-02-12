@@ -104,53 +104,101 @@ class Roles(commands.Cog):
 
     @commands.command(name = 'getroles', aliases = ['gr'])
     async def _get_roles(self, ctx:commands.Context):
-        
-        user = ctx.message.author
-        ch = ctx.channel
-        await ctx.message.delete()
-        #msg = await self.bot.wait_for('message', check = self.check(user), timeout=30)
-        
-        cat_dict = get_categories(ctx)
 
-        cat_keys = list(cat_dict.keys())
-        cat_keys.reverse()
+        if ctx.message.channel.id == r_channel_id:
+                
+            user = ctx.message.author
+            ch = ctx.channel
+            await ctx.message.delete()
+            #msg = await self.bot.wait_for('message', check = self.check(user), timeout=30)
+            
+            cat_dict = get_categories(ctx)
 
-        #print(user.mention)
+            cat_keys = list(cat_dict.keys())
+            cat_keys.reverse()
 
-        for cat in cat_keys:
-            role_list = cat_dict[cat]
-            role_names = [role.name for role in role_list]
-            embed = list2embed(role_names, title = "Roles in " + cat, color = 'green', msg = '**Hey {1}, please select your {0} from the ones below by writing the role name or the number:**'.format(cat.replace('_', ' '), user.mention))
+            #print(user.mention)
+
+            for cat in cat_keys:
+                role_list = cat_dict[cat]
+                role_names = [role.name for role in role_list]
+                embed = list2embed(role_names, title = "Roles in " + cat, color = 'green', msg = '**Hey {1}, please select your {0} from the ones below by writing the role name or the number:**'.format(cat.replace('_', ' '), user.mention))
+                role_msg = await ch.send(embed = embed)
+
+                msg = await self.bot.wait_for('message', check = check(user), timeout=60*3)
+
+                await self.get_cat_roles(cat, msg, user, role_list, role_names, role_msg)
+
+                # try:
+                #     role_ind = 0
+
+                #     if int(msg.content) - 1 in range(len(role_list)):
+                #         role_ind = int(msg.content) - 1
+                #     else:
+                #         role_ind = role_names.index(msg.content)
+
+                #     await user.add_roles(role_list[role_ind])
+
+                # except:
+                #     await ch.send('Sorry {}, we couldn\'t find that role.'.format(user.mention))
+                #     await asyncio.sleep(2)
+
+
+            print(user.id)
+            user = [mem for mem in ctx.guild.members if mem.id == user.id][0]
+            print(user)
+            usr_roles = user.roles
+            usr_roles.reverse()
+            usr_roles = [role.mention for role in usr_roles[:-1]]
+
+            embed = list2embed(usr_roles , title = "Updated roles for {0}".format(user.name), color = 'red', msg = '**{0} now has the roles :**'.format(user.mention))
             role_msg = await ch.send(embed = embed)
-
-            msg = await self.bot.wait_for('message', check = check(user), timeout=60*3)
-
-            try:
-                role_ind = 0
-
-                if int(msg.content) - 1 in range(len(role_list)):
-                    role_ind = int(msg.content) - 1
-                else:
-                    role_ind = role_names.index(msg.content)
-
-                await user.add_roles(role_list[role_ind])
-
-            except:
-                await ch.send('Sorry {}, we couldn\'t find that role.'.format(user.mention))
-                await asyncio.sleep(2)
-
-            await msg.delete()
+            await asyncio.sleep(10)
             await role_msg.delete()
 
-        print(user.id)
-        user = [mem for mem in ctx.guild.members if mem.id == user.id][0]
-        print(user)
-        usr_roles = user.roles
-        usr_roles.reverse()
-        usr_roles = [role.mention for role in usr_roles[:-1]]
+        else:
+            
+            await ctx.message.delete()
+            ch = self.bot.get_channel(r_channel_id)
+            await ctx.channel.send("Please go to {} to use that command".format(ch.mention))
 
-        embed = list2embed(usr_roles , title = "Updated roles for {0}".format(user.name), color = 'red', msg = '**{0} now has the roles :**'.format(user.mention))
-        role_msg = await ch.send(embed = embed)
-        await asyncio.sleep(10)
-        await role_msg.delete()
+    async def get_cat_roles(self, cat, msg, user, role_list, role_names, role_msg):    
+        try:
+            role_ind = 0
+
+            if int(msg.content) - 1 in range(len(role_list)):
+                role_ind = int(msg.content) - 1
+            else:
+                role_ind = role_names.index(msg.content)
+
+            await user.add_roles(role_list[role_ind])
+
+        except:
+            await msg.delete()
+            bot_msg = await msg.channel.send('Sorry {}, we couldn\'t find that role, Would you like to try again? y/n.'.format(user.mention))
+            msg = await self.bot.wait_for('message', check = check(user), timeout=60*3)
+
+            if msg.content.lower() == 'y' or msg.content.lower() == 'yes':
+                await msg.delete()
+                await bot_msg.delete()
+
+                msg = await self.bot.wait_for('message', check = check(user), timeout=60*3)
+                await self.get_cat_roles(cat, msg, user, role_list, role_names, role_msg)
+            
+            elif msg.content.lower() == 'n' or msg.content.lower() == 'no':
+                await msg.delete()
+
+                bot_msg = await msg.channel.send('Skipping to the next category')
+
+                await asyncio.sleep(3)
+                await bot_msg.delete()
+
+        try:
+            await msg.delete()
+        except:
+            print("fuck your life")
+        try:            
+            await role_msg.delete()
+        except:
+            print("fuck my life")
         
