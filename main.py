@@ -19,14 +19,12 @@ async def on_ready():
     bot.add_cog(roles.Roles(bot))
 
 def main():
-    # with open('config.json') as fh:
-    #     bot.config = json.load(fh)
+    with open('config.json') as fh:
+        bot.config = json.load(fh)
 
-    # bot.run(bot.config['token'])
+    bot.run(bot.config['token'])
     #bot.run(os.environ['token'])
-    
-    bot.run('ODA5NjYzNjQ4MTYzMTY4Mjg3.YCYYCA.gXacfT0hhmu2ISrLna-7m_J8oes')
-    
+        
 
 
 if __name__ == "__main__":
