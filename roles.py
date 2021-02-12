@@ -100,4 +100,8 @@ class Roles(commands.Cog):
 
     @commands.command(name = 'getroles', aliases = ['gr'])
     async def _get_roles(self, ctx:commands.Context):
+        
+        user = ctx.message.author
+        await user.send('👀')
+
         cat_list = get_categories(ctx)

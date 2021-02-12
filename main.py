@@ -16,9 +16,14 @@ async def on_ready():
     print(f'Logged in as {bot.user.name}')
     bot.add_cog(roles.Roles(bot))
 
-bot.run('ODA5NjYzNjQ4MTYzMTY4Mjg3.YCYYCA.XeB6xEnSMOHVyCorcVWk6ej1HKA')
+def main():
+    # with open('config.json') as fh:
+    #     bot.config = json.load(fh)
 
-'''@bot.command()
-async def l_roles(ctx):
-    await ctx.send(ctx.guild.roles)
-'''
+    # bot.run(bot.config['token'])
+    bot.run(os.environ['token'])
+    
+
+
+if __name__ == "__main__":
+    main()
