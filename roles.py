@@ -1,9 +1,18 @@
 import math
 import asyncio
 import discord
+import json
 from discord.ext import commands
 
-r_channel_id = 809339141791809568
+#Get channel id 
+#Local ----------
+# with open('config.json') as fh:
+#      config = json.load(fh)
+
+# r_channel_id = config['r_channel_id']
+
+#Server ---------
+r_channel_id = os.environ['r_channel_id']
 
 c_palette  = {
     'red': 0xED254E,
@@ -17,11 +26,11 @@ c_palette  = {
 }
 
 #Displays a list as an embed
-def list2embed(in_list, title = "Title", color = 'green', msg = ''):
+def list2embed(in_list, title = "Title", color = 'green', msg = '', extra = ''):
     msg += '\n '
 
     for i, r in enumerate(in_list):
-        msg += "{0}. **{1}** \n ".format(i + 1, r)
+        msg += ("{0}. **{1}** \n " + extra).format(i + 1, r)
 
     return discord.Embed(title = title, description = msg, color=c_palette[color])
 
@@ -122,7 +131,7 @@ class Roles(commands.Cog):
             for cat in cat_keys:
                 role_list = cat_dict[cat]
                 role_names = [role.name for role in role_list]
-                embed = list2embed(role_names, title = "Roles in " + cat, color = 'green', msg = '**Hey {1}, please select your {0} from the ones below by writing the role name or the number:**'.format(cat.replace('_', ' '), user.mention))
+                embed = list2embed(role_names, title = "Roles in " + cat, color = 'red', msg = '**Hey {1}, please select your {0} from the ones below by writing the role name or the number:**'.format(cat.replace('_', ' '), user.mention))
                 role_msg = await ch.send(embed = embed)
 
                 msg = await self.bot.wait_for('message', check = check(user), timeout=60*3)
@@ -151,7 +160,7 @@ class Roles(commands.Cog):
             usr_roles.reverse()
             usr_roles = [role.mention for role in usr_roles[:-1]]
 
-            embed = list2embed(usr_roles , title = "Updated roles for {0}".format(user.name), color = 'red', msg = '**{0} now has the roles :**'.format(user.mention))
+            embed = list2embed(usr_roles , title = "Updated roles for {0}".format(user.name), color = 'blue', msg = '**{0} now has the roles :** \n'.format(user.mention), extra = '\n')
             role_msg = await ch.send(embed = embed)
             await asyncio.sleep(10)
             await role_msg.delete()
@@ -202,3 +211,13 @@ class Roles(commands.Cog):
         except:
             print("fuck my life")
         
+    @commands.command(name = 'embed', aliases = ['emb'])
+    async def _get_roles(self, ctx:commands.Context):
+
+        await ctx.message.delete()
+
+        if ctx.message.channel.id == r_channel_id:
+            embed = list2embed([] , title = "How to use this channel", color = 'green', msg = 'Hey everyone, to initiate the role-assignment process, just type ```>getroles``` or ```>gr``` ', extra = '')
+            role_msg = await ctx.message.channel.send(embed = embed)
+            #await asyncio.sleep(10)
+            #await role_msg.delete()
