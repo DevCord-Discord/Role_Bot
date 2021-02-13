@@ -153,6 +153,7 @@ class Roles(commands.Cog):
         else:
             
             await ctx.message.delete()
+            print(r_channel_id, type(r_channel_id))
             ch = self.bot.get_channel(r_channel_id)
             await ctx.channel.send("Please go to {} to use that command".format(ch.mention))
 
