@@ -13,7 +13,7 @@ from discord.ext import commands
 # r_channel_id = config['r_channel_id']
 
 #Server ---------
-r_channel_id = os.environ['r_channel_id']
+r_channel_id = int(os.environ['r_channel_id'])
 
 c_palette  = {
     'red': 0xED254E,
@@ -153,6 +153,7 @@ class Roles(commands.Cog):
         else:
             
             await ctx.message.delete()
+            print(r_channel_id, type(r_channel_id))
             ch = self.bot.get_channel(r_channel_id)
             await ctx.channel.send("Please go to {} to use that command".format(ch.mention))
 
