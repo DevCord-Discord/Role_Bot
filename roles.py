@@ -154,7 +154,6 @@ class Roles(commands.Cog):
             
             await ctx.message.delete()
             ch = self.bot.get_channel(r_channel_id)
-            print(ch, type(ch))
             await ctx.channel.send("Please go to {} to use that command".format(ch.mention))
 
     async def get_cat_roles(self, cat, msg, user, role_list, role_names, role_msg):    
