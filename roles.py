@@ -13,7 +13,7 @@ from discord.ext import commands
 # r_channel_id = config['r_channel_id']
 
 #Server ---------
-r_channel_id = os.environ['r_channel_id']
+r_channel_id = int(os.environ['r_channel_id'])
 
 c_palette  = {
     'red': 0xED254E,
