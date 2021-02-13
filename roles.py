@@ -111,7 +111,6 @@ class Roles(commands.Cog):
             ch = self.bot.get_channel(r_channel_id)
             await ctx.channel.send("Please go to {} to use that command".format(ch.mention))
 
-
     @commands.command(name = 'getroles', aliases = ['gr'])
     async def _get_roles(self, ctx:commands.Context):
 
@@ -138,21 +137,6 @@ class Roles(commands.Cog):
                 msg = await self.bot.wait_for('message', check = check(user), timeout=60*3)
 
                 await self.get_cat_roles(cat, msg, user, role_list, role_names, role_msg)
-
-                # try:
-                #     role_ind = 0
-
-                #     if int(msg.content) - 1 in range(len(role_list)):
-                #         role_ind = int(msg.content) - 1
-                #     else:
-                #         role_ind = role_names.index(msg.content)
-
-                #     await user.add_roles(role_list[role_ind])
-
-                # except:
-                #     await ch.send('Sorry {}, we couldn\'t find that role.'.format(user.mention))
-                #     await asyncio.sleep(2)
-
 
             print(user.id)
             user = [mem for mem in ctx.guild.members if mem.id == user.id][0]
@@ -211,14 +195,12 @@ class Roles(commands.Cog):
             await role_msg.delete()
         except:
             print("fuck my life")
-        
+
     @commands.command(name = 'embed', aliases = ['emb'])
-    async def _get_roles(self, ctx:commands.Context):
+    async def _embed(self, ctx:commands.Context):
 
         await ctx.message.delete()
 
         if ctx.message.channel.id == r_channel_id:
             embed = list2embed([] , title = "How to use this channel", color = 'green', msg = 'Hey everyone, to initiate the role-assignment process, just type ```>getroles``` or ```>gr``` ', extra = '')
             role_msg = await ctx.message.channel.send(embed = embed)
-            #await asyncio.sleep(10)
-            #await role_msg.delete()
